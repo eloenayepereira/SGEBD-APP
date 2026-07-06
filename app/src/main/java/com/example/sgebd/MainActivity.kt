@@ -2,6 +2,7 @@ package com.example.sgebd
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -60,6 +61,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                val url = request.url.toString()
+                if (url.startsWith(SITE_URL)) return false
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                } catch (_: Exception) {}
+                return true
+            }
+
             override fun onPageFinished(view: WebView, url: String) {
                 progressBar.visibility = View.GONE
             }
